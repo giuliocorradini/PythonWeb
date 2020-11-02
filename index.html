@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web System Status</title>
+</head>
+<body>
+<h1>Web System Status</h1>
+<p>Monitor a remote server status using AJAX or WebSocket</p>
+<p id="status">No data available. Hit refresh</p>
+<p><button onclick="refresh()">Refresh</button> using AJAX call to /api/system</p>
+<p><button onclick="enable_timer()">Enable Autorefresh</button> every second. Timer status: <span id="timer_status">not running</span>.</p>
+<p><button onclick="websocket_refresh()">WS Refresh</button> using WebSocket protocol upgrade</p>
+
+
+<script type="text/javascript">
+    function update_status_ui(response) {
+        document.getElementById("status").innerHTML = response;
+    }
+
+    function refresh() {
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open('GET', '/api/system', true);
+        xhttp.onreadystatechange = () => {
+            if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
+                update_status_ui(xhttp.responseText);
+            }
+        }
+        xhttp.send();
+    }
+
+    
+    function enable_timer() {
+        setInterval(refresh, 1000);
+        document.getElementById("timer_status").innerText = "running";
+    }
+
+
+    var ws = new WebSocket(`ws://${window.location.host}/api/system`);
+    ws.onmessage = (event) => {
+        response = JSON.parse(event.data.decode());
+        update_status_ui(response);
+    };
+
+    function websocket_refresh() {
+        ws.send("refresh");
+    }
+</script>
+</body>
+</html>
