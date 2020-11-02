@@ -39,7 +39,6 @@ class WSSRequestHandler(http.server.SimpleHTTPRequestHandler):
         'system': jsonify(stats.system_wide),
         'cpu': jsonify(stats.cpu),
         'ram': jsonify(stats.ram),
-        'swap': jsonify(stats.swap),
         'disk': jsonify(stats.disk),
         'net': jsonify(stats.net),
         'boot': jsonify(stats.boot),

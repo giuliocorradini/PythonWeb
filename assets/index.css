@@ -1,0 +1,61 @@
+
+.btn-group {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.btn-group button {
+    background-color: #BCAF9C;
+    border: 2px solid #CBBEB3;
+    color: whitesmoke;
+    font-size: 14px;
+    padding: 10px 25px;
+    float: left;
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none;
+}
+
+button.clicked, .btn-group button:hover {
+    background-color: #9e917e;
+}
+
+
+button.collapsible {
+    background-color: #DB5461;
+    color: white;
+    border-radius: 7px 7px 0px 0px;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button.collapsible.active, button.collapsible:hover {
+    background-color: #88343c;
+}
+
+.collapsible-content {
+    padding: 10px 20px;
+    background-color: #dbd9d4;
+}
+
+.collapsible-content.collapsed {
+    display: none;
+    overflow: hidden;
+}
+
+.collapsible-section {
+    margin: 5px 0;
+}
+
+img.section-icon {
+    width: 100px;
+    height: 100px;
+    display: inline;
+}

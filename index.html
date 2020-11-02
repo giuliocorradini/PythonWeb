@@ -2,23 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Web System Status</title>
+
+    <link rel="stylesheet" href="/assets/index.css" type="text/css">
 </head>
+
 <body>
 <h1>Web System Status</h1>
-<p>Monitor a remote server status using AJAX or WebSocket</p>
-<p id="status">No data available. Hit refresh</p>
-<p><button onclick="refresh()">Refresh</button> using AJAX call to /api/system</p>
-<p><button onclick="enable_timer()">Enable Autorefresh</button> every second. Timer status: <span id="timer_status">not running</span>.</p>
-<p><button onclick="websocket_refresh()">WS Refresh</button> using WebSocket protocol upgrade</p>
 
 
+<div class="collapsible-section">
+    <button class="collapsible" onclick="collapse(this)">CPU</button>
+    <div class="collapsible-content collapsed">
+        <img src="/assets/cpu.png" class="section-icon"/>
+        <p>Count: <span id="cpu_count">0</span>.
+            Load: <span id="cpu_load">0</span>%.
+            <progress value="0" max="100" id="cpu_load_prog"></progress>
+        </p>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <button class="collapsible" onclick="collapse(this)">RAM</button>
+    <div class="collapsible-content collapsed">
+        <img src="/assets/ram.png" class="section-icon" />
+        <p>Total: <span id="ram_total"></span>.
+            Available: <span id="ram_avail"></span>.
+            Used: <span id="ram_used"></span>%.
+        </p>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <button class="collapsible" onclick="collapse(this)">Disk</button>
+    <div class="collapsible-content collapsed">
+        <img src="/assets/disk.png" class="section-icon" />
+        <p>Total: <span id="disk_total"></span>GB.
+            Used: <span id="disk_used"></span>GB.
+            Available: <span id="disk_avail"></span>GB.
+        </p>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <button class="collapsible" onclick="collapse(this)">Network</button>
+    <div class="collapsible-content collapsed">
+        <div class="nic">
+            <img src="/assets/net.png" class="section-icon" />
+            <p>Sent bytes: <span id="nic_byte_sent"></span>.
+                Received bytes: <span id="nic_byte_recv"></span>.
+                Sent packets: <span id="nic_pack_sent"></span>.
+                Received packets: <span id="nic_pack_recv"></span>.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <button class="collapsible" onclick="collapse(this)">Boot</button>
+    <div class="collapsible-content collapsed">
+        <img src="/assets/time.png" class="section-icon">
+        <p>Boot time: <span id="boot_time"></span>.</p>
+    </div>
+</div>
+
+
+<div class="btn-group">
+    <div class="btn-group-wrap">
+        <button onclick="refresh()">Refresh</button>
+        <button class="switch" onclick="toggle_timer(this)">Auto</button>
+        <button class="switch" onclick="toggle_websocket(this)">WebSocket</button>
+        <button onclick="collapse_all()">Toggle/Collapse</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/ui.js"></script>
 <script type="text/javascript">
-    function update_status_ui(response) {
-        document.getElementById("status").innerHTML = response;
-    }
+    var use_websocket = false;
 
-    function refresh() {
+    function ajax_refresh() {
         var xhttp = new XMLHttpRequest();
 
         xhttp.open('GET', '/api/system', true);
@@ -30,13 +94,6 @@
         xhttp.send();
     }
 
-    
-    function enable_timer() {
-        setInterval(refresh, 1000);
-        document.getElementById("timer_status").innerText = "running";
-    }
-
-
     var ws = new WebSocket(`ws://${window.location.host}/api/system`);
     ws.onmessage = (event) => {
         response = JSON.parse(event.data.decode());
@@ -45,6 +102,41 @@
 
     function websocket_refresh() {
         ws.send("refresh");
+    }
+
+    function refresh() {
+        if(use_websocket) {
+            websocket_refresh();
+        } else {
+            ajax_refresh();
+        }
+    }
+
+    function enable_timer() {
+        setInterval(refresh, 1000);
+        document.getElementById("timer_status").innerText = "running";
+    }
+
+
+    var timer_interval;
+    function toggle_timer(caller) {
+        if(caller.classList.contains("clicked")) {
+            caller.classList.remove("clicked");
+            clearInterval(timer_interval);
+        } else {
+            caller.classList.add("clicked");
+            timer_interval = setInterval(refresh, 1000);
+        }
+    }
+
+    function toggle_websocket(caller) {
+        if(caller.classList.contains("clicked")) {
+            caller.classList.remove("clicked");
+            use_websocket = false;
+        } else {
+            caller.classList.add("clicked");
+            use_websocket = true;
+        }
     }
 </script>
 </body>

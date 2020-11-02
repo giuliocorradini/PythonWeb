@@ -20,14 +20,11 @@ def cpu():
 def ram():
     return psutil.virtual_memory()
 
-def swap():
-    return psutil.swap_memory()
-
 def disk():
     return psutil.disk_usage("/")
 
 def net():
-    return psutil.net_io_counters(pernic=True)
+    return psutil.net_io_counters()
 
 def boot():
     return psutil.boot_time()
@@ -41,7 +38,6 @@ def system_wide():
     statistics = {
         "cpu": cpu(),
         "ram": ram(),
-        "swap": swap(),
         "disk": disk(),
         "net": net(),
         "boot": boot()
