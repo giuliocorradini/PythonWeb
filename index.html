@@ -94,9 +94,9 @@
         xhttp.send();
     }
 
-    var ws = new WebSocket(`ws://${window.location.host}/api/system`);
+    var ws = new WebSocket(`ws://${window.location.host}/ws`);
     ws.onmessage = (event) => {
-        response = JSON.parse(event.data.decode());
+        response = event.data;
         update_status_ui(response);
     };
 

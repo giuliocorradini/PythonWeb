@@ -19,6 +19,7 @@ import argparse
 import sys
 import json
 import stats
+from HTTPWebSocketsHandler import HTTPWebSocketsHandler
 
 
 def jsonify(func):
@@ -34,7 +35,7 @@ def jsonify(func):
     return wrapped_func
 
 
-class WSSRequestHandler(http.server.SimpleHTTPRequestHandler):
+class WSSRequestHandler(HTTPWebSocketsHandler):
     routes = {
         'system': jsonify(stats.system_wide),
         'cpu': jsonify(stats.cpu),
@@ -74,9 +75,16 @@ class WSSRequestHandler(http.server.SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+    def on_ws_message(self, message):
+        if message == "refresh":
+            self.send_message(json.dumps(stats.system_wide()))
+
 
 def main(host, port):
-    with http.server.HTTPServer((host, port), WSSRequestHandler) as server:
+    with http.server.ThreadingHTTPServer((host, port), WSSRequestHandler) as server:
+
+        server.auth = None
+
         try:
             server.serve_forever()
         except KeyboardInterrupt:
