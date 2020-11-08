@@ -17,8 +17,8 @@
     <button class="collapsible" onclick="collapse(this)">CPU</button>
     <div class="collapsible-content collapsed">
         <img src="/assets/cpu.png" class="section-icon"/>
-        <p>Count: <span id="cpu_count">0</span>.
-            Load: <span id="cpu_load">0</span>%.
+        <p>Count: <span id="cpu_count" class="section-label">0</span>
+            Load: <span id="cpu_load">0</span>%
             <progress value="0" max="100" id="cpu_load_prog"></progress>
         </p>
     </div>
@@ -69,16 +69,26 @@
 </div>
 
 
-<div class="btn-group">
-    <div class="btn-group-wrap">
+<!--div class="btn-group">
+    <div class="btn-group-wrap" id="react_buttons">
         <button onclick="refresh()">Refresh</button>
         <button class="switch" onclick="toggle_timer(this)">Auto</button>
         <button class="switch" onclick="toggle_websocket(this)">WebSocket</button>
         <button onclick="collapse_all()">Toggle/Collapse</button>
     </div>
+</div-->
+
+<div class="btn-group">
+    <div class="btn-group-wrap" id="react_button">
+        
+    </div>
 </div>
 
 <script type="text/javascript" src="/assets/ui.js"></script>
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
     var use_websocket = false;
 
@@ -139,5 +149,8 @@
         }
     }
 </script>
+
+<script type="text/babel" src="/ui/button.jsx"></script>
+<script type="text/babel" src="/ui/ui.jsx"></script>
 </body>
 </html>

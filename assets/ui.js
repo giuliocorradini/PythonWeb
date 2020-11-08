@@ -8,7 +8,7 @@ function update_status_ui(response) {
 
     cpu_count.innerText = stats.cpu.count;
     avg_load = stats.cpu.load[1] / stats.cpu.count * 100;//TODO: selectable timespan for average load
-    cpu_load.innerText = avg_load;
+    cpu_load.innerText = avg_load.toFixed(1);
     cpu_load_progress.value = avg_load;
 
 
@@ -27,9 +27,9 @@ function update_status_ui(response) {
     disk_used = document.getElementById("disk_used");
     disk_avail = document.getElementById("disk_avail");
 
-    disk_total.innerText = stats.disk[0] / 1000000000;
-    disk_used.innerText = stats.disk[1] / 1000000000;
-    disk_avail.innerText = stats.disk[2] / 1000000000;
+    disk_total.innerText = (stats.disk[0] / 1000000000).toFixed(3);
+    disk_used.innerText = (stats.disk[1] / 1000000000).toFixed(3);
+    disk_avail.innerText = (stats.disk[2] / 1000000000).toFixed(3);
 
 
     /* Network */

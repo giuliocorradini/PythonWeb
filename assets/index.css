@@ -57,5 +57,9 @@ button.collapsible.active, button.collapsible:hover {
 img.section-icon {
     width: 100px;
     height: 100px;
-    display: inline;
+    float: left;
+}
+
+.section-label {
+    float: left;
 }
